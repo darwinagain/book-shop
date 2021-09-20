@@ -27,3 +27,11 @@ Migrate necessary tables using `golang-migrate`:
 ```
 make db_migrate
 ```
+
+## Testing
+
+`Coming Soon`
+
+## API Documentation
+
+`Coming Soon`
