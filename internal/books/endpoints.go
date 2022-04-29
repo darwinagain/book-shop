@@ -27,7 +27,8 @@ func handleRequests() {
 	myRouter := mux.NewRouter().StrictSlash(true)
 
 	myRouter.HandleFunc("/health/live", getLiveness()).Methods("GET")
-	myRouter.HandleFunc("/books", returnAllBooks()).Methods("GET")
+	myRouter.HandleFunc("/books/all", returnAllBooks()).Methods("GET")
+	myRouter.HandleFunc("/books", returnQueryResults()).Methods("GET")
 	myRouter.HandleFunc("/book/{id}", returnSingleBook()).Methods("GET")
 	myRouter.HandleFunc("/book/{id}", updateBook()).Methods("PATCH")
 	myRouter.HandleFunc("/book/{id}", deleteBook()).Methods("DELETE")

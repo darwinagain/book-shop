@@ -1,6 +1,7 @@
 package books
 
 import (
+	"book-shop/internal/models"
 	"book-shop/internal/postgres"
 	"fmt"
 	"log"
@@ -52,6 +53,38 @@ func returnSingleBook() http.HandlerFunc {
 		}
 
 		output, _ := ffjson.Marshal(book)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		if _, err := w.Write(output); err != nil {
+			log.Printf("Error writing payload: %v", err)
+		}
+	}
+}
+
+func returnQueryResults() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		log.Println("Endpoint Hit: returnQueryResults")
+
+		bookID, _ := strconv.Atoi(r.URL.Query().Get("id"))
+		title := r.URL.Query().Get("title")
+		author := r.URL.Query().Get("author")
+		genre := r.URL.Query().Get("genre")
+
+		book := models.Book2{
+			ID:     bookID,
+			Title:  title,
+			Author: author,
+			Genre:  genre,
+		}
+
+		books, err := postgres.GetQueryResults(book)
+		if err != nil {
+			log.Printf("Error getting books: %v", err)
+			return
+		}
+
+		output, _ := ffjson.Marshal(books)
+
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		if _, err := w.Write(output); err != nil {
