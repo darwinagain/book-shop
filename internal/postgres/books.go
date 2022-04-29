@@ -62,6 +62,48 @@ func GetBookByID(bookID int) (models.Book, error) {
 	return bookData, nil
 }
 
+func GetQueryResults(book models.Book2) ([]*models.Book, error) {
+	db := OpenConnection()
+
+	var books []*models.Book
+
+	query := ("SELECT id, title, author_first_name, author_last_name, genre, quantity FROM books WHERE")
+
+	if book.ID != 0 {
+		query += fmt.Sprintf(" id = %d AND", book.ID)
+	}
+	if book.Title != "" {
+		query += fmt.Sprintf(" title ILIKE '%%%s%%' AND", book.Title)
+	}
+	if book.Author != "" {
+		query += fmt.Sprintf(" (CONCAT(author_first_name, ' ', author_last_name) ILIKE '%%%s%%' OR author_first_name ILIKE '%%%s%%' OR author_last_name ILIKE '%%%s%%') AND", book.Author, book.Author, book.Author)
+	}
+	if book.Genre != "" {
+		query += fmt.Sprintf(" genre ILIKE '%%%s%%' AND", book.Genre)
+	}
+
+	query = query[:len(query)-4] + ";"
+
+	rows, err := db.Query(query)
+	if err != nil {
+		return []*models.Book{}, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		book := new(models.Book)
+		if err := rows.Scan(&book.ID, &book.Title, &book.AuthorFirstName, &book.AuthorLastName, &book.Genre, &book.Quantity); err != nil {
+			return []*models.Book{}, err
+		}
+		books = append(books, book)
+	}
+
+	defer db.Close()
+
+	return books, nil
+}
+
 func CreateBook(bookData models.Book) ([]byte, error) {
 	db := OpenConnection()
 

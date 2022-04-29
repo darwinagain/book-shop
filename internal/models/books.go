@@ -8,3 +8,14 @@ type Book struct {
 	Genre           string `json:"genre"  db:"genre" validate:"required,ascii,max=128"`
 	Quantity        *int   `json:"quantity" db:"quantity" validate:"required,numeric"`
 }
+
+type Books struct {
+	Book []Book
+}
+
+type Book2 struct {
+	ID     int
+	Title  string
+	Author string
+	Genre  string
+}
