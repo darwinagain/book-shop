@@ -4,7 +4,7 @@ create table if not exists books (
     author_first_name varchar not null,
     author_last_name varchar not null,
     genre varchar not null,
-    quantity int not null,
+    quantity int,
     created_at timestamp with time zone not null default now(),
     updated_at timestamp with time zone not null default now()
 );

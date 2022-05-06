@@ -4,7 +4,6 @@ import (
 	"book-shop/internal/models"
 	"book-shop/internal/postgres"
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -18,8 +17,6 @@ func createNewBook() http.HandlerFunc {
 		ctx := r.Context()
 
 		var reqBody models.Book
-
-		fmt.Println(r.Body)
 
 		// decode json body
 		if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
