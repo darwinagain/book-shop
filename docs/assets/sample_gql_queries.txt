@@ -1,0 +1,21 @@
+// get all books
+query {
+	books{
+    id
+    title
+    authorFirstName
+    authorLastName
+    genre
+  }
+}
+
+// create new book
+mutation {
+	createBook(input: {title: "Harry Potter and the Goblet of Fire", authorFirstName: "J.K.", authorLastName: "Rowling", genre: "Fantasy"}){
+	  id,
+	  title,
+	  authorFirstName,
+	  authorLastName,
+	  genre,
+	}
+  }
